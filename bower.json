@@ -1,0 +1,21 @@
+{
+  "name": "slick-sort",
+  "version": "0.0.0",
+  "authors": [
+    "Eugene Prystupa <eugene.prystupa@lab49.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "jquery.event.drag-drop": "~2.2.1",
+    "lodash": "~2.3.0"
+  }
+}

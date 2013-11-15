@@ -1,0 +1,86 @@
+<html>
+<head>
+<link rel="stylesheet" href="libs/slickgrid/slick.grid.css" type="text/css"/>
+<script src="bower_components/jquery/jquery.js"></script>
+<script src="bower_components/jquery.event.drag-drop/event.drag/jquery.event.drag.js"></script>
+<script src="libs/slickgrid/slick.core.js"></script>
+<script src="libs/slickgrid/slick.grid.js"></script>
+<script src="bower_components/lodash/dist/lodash.js"></script>
+
+</head>
+<body>
+<label>
+<span>Even only filter</span>
+<input type="checkbox" onchange="filterEven(event)">
+</label>
+<div id="container" style="width:100%;height:500px;"></div>
+</body>
+
+<script>
+
+var data = _.map(_.shuffle(_.range(40000)), function(i) {
+    return {a: i};
+});
+var sorted = _.chain(data)
+    .map(function(item, i) { return [i, item.a]; })
+    .sortBy(function(pair) { return pair[1]; })
+    .map(function(pair) { return pair[0]; })
+    .value();
+var included = _.range(data.length);
+var includedSorted = sorted;
+
+function getLength() {
+    return included.length;
+}
+
+var sortCol = undefined;
+var sortAsc = undefined;
+function getItem(row) {
+    var index = sortCol === undefined? 
+        included[row] : 
+        (sortAsc? includedSorted[row] : includedSorted[includedSorted.length - row - 1]);
+    return data[index];    
+}
+
+var columns = [{name: "a", "id": "a", "field": "a", sortable: true}];
+
+var options = {enableColumnReorder: false};
+
+var grid = new Slick.Grid(
+    "#container",
+    {getLength: getLength, getItem: getItem},
+    columns,
+    options);
+        
+grid.onSort.subscribe(function (e, args) {
+    sortCol = args.sortCol;
+    sortAsc = args.sortAsc;
+    grid.invalidateAllRows();
+    grid.render();
+});
+
+
+function filterEven(e) {
+    var filter = e.target.checked;
+    if(filter) {
+        included = _.flatten(data, function(item, i) {
+            return item.a % 2 === 0? [i] : [];
+        });
+        var includedHash = _.indexBy(included);
+        includedSorted = _.filter(sorted, function(i) {
+            return !!includedHash[i];
+        });
+    }
+    else {
+        included = _.range(data.length);
+        includedSorted = sorted;
+    }
+    
+    grid.updateRowCount();
+    grid.invalidateAllRows();
+    grid.render();
+}
+
+</script>
+
+</html>

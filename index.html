@@ -20,7 +20,7 @@
 <script>
 
 var data = _.map(_.shuffle(_.range(40000)), function(i) {
-    return {a: i};
+    return {a: i, b: Math.random(), c: Math.random(), d: Math.random(), e: Math.random(), f: Math.random(), g: Math.random()};
 });
 var sorted = _.chain(data)
     .map(function(item, i) { return [i, item.a]; })
@@ -43,7 +43,15 @@ function getItem(row) {
     return data[index];    
 }
 
-var columns = [{name: "a", "id": "a", "field": "a", sortable: true}];
+var columns = [
+    {name: "a", "id": "a", "field": "a", sortable: true},
+    {name: "b", "id": "b", "field": "b", sortable: true},
+    {name: "c", "id": "c", "field": "c", sortable: true},
+    {name: "d", "id": "d", "field": "d", sortable: true},
+    {name: "e", "id": "e", "field": "e", sortable: true},
+    {name: "f", "id": "f", "field": "f", sortable: true},
+    {name: "g", "id": "g", "field": "g", sortable: true},
+];
 
 var options = {enableColumnReorder: false};
 
